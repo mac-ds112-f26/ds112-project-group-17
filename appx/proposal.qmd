@@ -1,5 +1,44 @@
 ---
-title: "Proposal"
+title: "Caffeine Intake as a Function of Coffee Preferences"
 ---
 
-Your proposal go here.
+## Created by: Emma Cunningham and Anna Fratto
+
+>Project Goal: Our project intends to investigate how varying coffee preferences affect caffeine usage. We plan to test different variables such as time of day (when making the coffee), cream use, coffee type, etc., and see how that impacts the amount of caffeine someone consumes.
+
+##2-3 Broad Research Questions:
+- What are the trends and general preferences of coffee drinkers in the US? 
+- What factors influence coffee intake?
+- What are the top influencers in consumer decisions to drink coffee at home vs. out? 
+- What do people add when making their ideal order/coffee?  
+
+##Project Inspiration 
+- We wanted to focus on a health related topic 
+- We are curious about caffeine intake within college students, but data might be restricted 
+
+##Potential Data Source:
+- The Great American Coffee Taste Test - Tidy Tuesday (2024)
+- https://github.com/rfordatascience/tidytuesday/blob/main/data/2024/2024-05-14/readme.md  
+
+##Communication Plans:
+- Our communication plan is to use iMessage. We also plan to use Google Docs (when mostly doing writing and not coding) to divide the work, then add it to our qmd. We feel this way of communicating and working is most effective at dividing the work and seeing what is finished/not finished. 
+- We will try and meet/work in class when we can and then on Sundays/a weekday.
+
+##Roles:
+- We feel like we do not really need someone to be the main point of contact since there are two of us, but we intend to both communicate effectively when we have questions or concerns. It also helps that we plan on using iMessage because iMessage is easy to communicate through and access/see. 
+- Together, we will work on overseeing the codebase and website and making sure the code follows the “Code Styling Guide.” Before we submit, we should check the “Code Styling Guide” and ensure it fits within the expectations. 
+
+##Rough Implementation Plan
+- Finish everything before the deadlines so we can double-check 
+- Plan ahead and have meet-up times outside of class 
+- We will split up work evenly and skim the other person’s work to ensure we both understand what’s happening. 
+
+
+
+
+
+
+
+
+
+
