@@ -1,5 +1,16 @@
 ---
-title: "Member 2 First Name & Last Name Initial"
+title: "Member 2: Anna F."
 ---
 
 Your exploratory data analysis of the team datasets go here.
+
+
+##Instructions
+As individuals, not as a team, each member should perform an exploratory data analysis (EDA) on one of the project dataset and add the results into their respective Quarto file under the eda folder of the project repository.
+
+```{r}
+library(tidyverse)
+
+
+```
+
