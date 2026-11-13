@@ -1,5 +1,79 @@
 ---
-title: "Member 1 First Name & Last Name Initial"
+title: "Emma C. (Member 1)"
 ---
 
 Your exploratory data analysis of the team datasets go here.
+
+Dataset: https://github.com/rfordatascience/tidytuesday/blob/main/data/2024/2024-05-14/readme.md
+
+```{r}
+library(tidyverse)
+library(janitor)
+library(here)
+library(fs)
+coffee_survey <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2024/2024-05-14/coffee_survey.csv')
+
+head(coffee_survey)
+```
+>Used this to view the data and we can see there are a lot of NA values so we need to specify what we are looking at. 
+
+```{r}
+library(tidyverse)
+
+# Create a small, focused dataset for your analysis
+cups_summary <- coffee_survey |>
+  select(age, cups, where_drink) |>
+  drop_na()
+head(cups_summary)
+```
+>Specifed the criteria that we would look at. From this we were able to see the relationship between coffee preferances and age. 
+
+```{r}
+cups_summary <- coffee_survey |>
+  select(age, where_drink, favorite) |>
+  drop_na()
+head(cups_summary)
+```
+>Continued to specify the criteria that we would look at. From this we were able to see the relationship between other coffee preferances and age. 
+
+```{r}
+library(tidyverse)
+
+# Load the dataset directly from GitHub
+coffee_survey <- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2024/2024-05-14/coffee_survey.csv")
+
+top_reasons <- coffee_survey |>
+  filter(!is.na(why_drink)) |>
+  separate_rows(why_drink, sep = ",\\s*") |>
+  count(why_drink, sort = TRUE) |>
+  mutate(pct_of_respondents = round(n / sum(!is.na(coffee_survey$why_drink)) * 100, 1))
+
+print(top_reasons)
+```
+>Attempted to see if there is any relationships between age and reasons for drinking coffee.
+
+```{r}
+library(tidyverse)
+
+coffee_survey <- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2024/2024-05-14/coffee_survey.csv")
+
+coffee_survey |>
+  filter(!is.na(why_drink)) |>
+  # Standardize order of reasons inside each string so "A, B" and "B, A" match
+  mutate(
+    combo = map_chr(str_split(why_drink, ",\\s*"), ~ paste(sort(.x), collapse = " + "))
+  ) |>
+  count(combo, sort = TRUE) |>
+  slice_head(n = 10) |>
+  ggplot(aes(x = n, y = reorder(combo, n))) +
+  geom_col(fill = "#6F4E37", width = 0.7) +
+  geom_text(aes(label = n), hjust = -0.2, size = 3.5) +
+  scale_x_continuous(expand = expansion(mult = c(0, 0.12))) +
+  labs(
+    title = "Top 10 Combinations of Reasons People Drink Coffee",
+    x = "Number of Respondents",
+    y = NULL
+  ) +
+  theme_minimal()
+```
+
