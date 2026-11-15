@@ -2,4 +2,40 @@
 title: "Case Study"
 ---
 
-Your case study go here.
+::: {.callout-note title="Notes on *Where New Slang Comes From*" icon=false}
+
+### 📖 What the Article Does Well
+
+- Introduces the data with a **story or catchy example**
+- Describes **how the data was collected** (through a Google search) and which **keywords** were used
+  - This makes the data collection *replicable*
+- Opens with a **table of compelling introductory stats** from the last year
+- Places **graphs and visualizations within the related text**, not at the end or in random, unrelated parts of the report
+  - Uses a *variety* of graphs:
+    - Line graph
+    - Choropleth maps
+    - Heat map
+- **Defines** the variables
+- Poses the **research question** and previews **3 main outcomes**
+  - Gives *historical context*
+  - Provides *definitions*
+- Discusses the data in an **entertaining** way
+
+:::
+
+::: {.callout-important title="Avoid" icon=false}
+Don't open with a trigger or a gaslighting scenario just to show how much information there is. **Do not use this!**
+:::
+
+::: {.callout-tip title="Ideas for Our Report" icon=false}
+
+- Look around the internet to see what's **compelling** and which styles could keep our audience *engaged*
+- Look for **Midwest slang** or words that might stand out
+- Use **formatting** to make key ideas pop:
+  - *Italics*
+  - **Bold**
+  - Larger font size
+
+:::
+
+**Source:** [Where New Slang Comes From](https://pudding.cool/2017/02/new-slang/) — *The Pudding*
