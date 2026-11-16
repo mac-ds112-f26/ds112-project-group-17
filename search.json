@@ -2,7 +2,7 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "Project Title",
+    "title": "Coffee Preferences in the US",
     "section": "",
     "text": "Your report goes here.\n\nCode# a test code chunk",
     "crumbs": [
@@ -12,12 +12,12 @@
   {
     "objectID": "eda/eda-member1.html",
     "href": "eda/eda-member1.html",
-    "title": "Member 1 First Name & Last Name Initial",
+    "title": "Emma C. (Member 1)",
     "section": "",
-    "text": "Your exploratory data analysis of the team datasets go here.",
+    "text": "Your exploratory data analysis of the team datasets go here.\nDataset: https://github.com/rfordatascience/tidytuesday/blob/main/data/2024/2024-05-14/readme.md\n\nCodelibrary(tidyverse)\nlibrary(janitor)\nlibrary(here)\nlibrary(fs)\ncoffee_survey &lt;- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2024/2024-05-14/coffee_survey.csv')\n\nhead(coffee_survey)\n\n# A tibble: 6 × 57\n  submission_id age   cups  where_drink brew  brew_other purchase purchase_other\n  &lt;chr&gt;         &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;    &lt;chr&gt;         \n1 gMR29l        18-2… &lt;NA&gt;  &lt;NA&gt;        &lt;NA&gt;  &lt;NA&gt;       &lt;NA&gt;     &lt;NA&gt;          \n2 BkPN0e        25-3… &lt;NA&gt;  &lt;NA&gt;        Pod/… &lt;NA&gt;       &lt;NA&gt;     &lt;NA&gt;          \n3 W5G8jj        25-3… &lt;NA&gt;  &lt;NA&gt;        Bean… &lt;NA&gt;       &lt;NA&gt;     &lt;NA&gt;          \n4 4xWgGr        35-4… &lt;NA&gt;  &lt;NA&gt;        Coff… &lt;NA&gt;       &lt;NA&gt;     &lt;NA&gt;          \n5 QD27Q8        25-3… &lt;NA&gt;  &lt;NA&gt;        Pour… &lt;NA&gt;       &lt;NA&gt;     &lt;NA&gt;          \n6 V0LPeM        55-6… &lt;NA&gt;  &lt;NA&gt;        Pod/… &lt;NA&gt;       &lt;NA&gt;     &lt;NA&gt;          \n# ℹ 49 more variables: favorite &lt;chr&gt;, favorite_specify &lt;chr&gt;, additions &lt;chr&gt;,\n#   additions_other &lt;chr&gt;, dairy &lt;chr&gt;, sweetener &lt;chr&gt;, style &lt;chr&gt;,\n#   strength &lt;chr&gt;, roast_level &lt;chr&gt;, caffeine &lt;chr&gt;, expertise &lt;dbl&gt;,\n#   coffee_a_bitterness &lt;dbl&gt;, coffee_a_acidity &lt;dbl&gt;,\n#   coffee_a_personal_preference &lt;dbl&gt;, coffee_a_notes &lt;chr&gt;,\n#   coffee_b_bitterness &lt;dbl&gt;, coffee_b_acidity &lt;dbl&gt;,\n#   coffee_b_personal_preference &lt;dbl&gt;, coffee_b_notes &lt;chr&gt;, …\n\n\n\nUsed this to view the data and we can see there are a lot of NA values so we need to specify what we are looking at.\n\n\nCodelibrary(tidyverse)\n\n# Create a small, focused dataset for your analysis\ncups_summary &lt;- coffee_survey |&gt;\n  select(age, cups, where_drink) |&gt;\n  drop_na()\nhead(cups_summary)\n\n# A tibble: 6 × 3\n  age             cups        where_drink                                 \n  &lt;chr&gt;           &lt;chr&gt;       &lt;chr&gt;                                       \n1 25-34 years old Less than 1 At a cafe                                   \n2 &lt;18 years old   2           On the go, At a cafe, At home, At the office\n3 25-34 years old 1           At the office                               \n4 &lt;18 years old   3           At home, At the office, At a cafe           \n5 &gt;65 years old   3           At the office, At a cafe                    \n6 25-34 years old 1           At home, At the office, On the go           \n\n\n\nSpecifed the criteria that we would look at. From this we were able to see the relationship between coffee preferances and age.\n\n\nCodecups_summary &lt;- coffee_survey |&gt;\n  select(age, where_drink, favorite) |&gt;\n  drop_na()\nhead(cups_summary)\n\n# A tibble: 6 × 3\n  age             where_drink                                  favorite         \n  &lt;chr&gt;           &lt;chr&gt;                                        &lt;chr&gt;            \n1 18-24 years old At a cafe, At the office, At home, On the go Pourover         \n2 25-34 years old At a cafe                                    Regular drip cof…\n3 &lt;18 years old   On the go, At a cafe, At home, At the office Other            \n4 25-34 years old At the office                                Pourover         \n5 &lt;18 years old   At home, At the office, At a cafe            Pourover         \n6 &gt;65 years old   At the office, At a cafe                     Cortado          \n\n\n\nContinued to specify the criteria that we would look at. From this we were able to see the relationship between other coffee preferances and age.\n\n\nCodelibrary(tidyverse)\n\n# Load the dataset directly from GitHub\ncoffee_survey &lt;- read_csv(\"https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2024/2024-05-14/coffee_survey.csv\")\n\ntop_reasons &lt;- coffee_survey |&gt;\n  filter(!is.na(why_drink)) |&gt;\n  separate_rows(why_drink, sep = \",\\\\s*\") |&gt;\n  count(why_drink, sort = TRUE) |&gt;\n  mutate(pct_of_respondents = round(n / sum(!is.na(coffee_survey$why_drink)) * 100, 1))\n\nprint(top_reasons)\n\n# A tibble: 5 × 3\n  why_drink                          n pct_of_respondents\n  &lt;chr&gt;                          &lt;int&gt;              &lt;dbl&gt;\n1 It tastes good                  3355               94  \n2 I need the caffeine             2021               56.6\n3 I need the ritual               1922               53.9\n4 It makes me go to the bathroom   465               13  \n5 Other                            168                4.7\n\n\n\nAttempted to see if there is any relationships between age and reasons for drinking coffee.\n\n\nCodelibrary(tidyverse)\n\ncoffee_survey &lt;- read_csv(\"https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2024/2024-05-14/coffee_survey.csv\")\n\ncoffee_survey |&gt;\n  filter(!is.na(why_drink)) |&gt;\n  # Standardize order of reasons inside each string so \"A, B\" and \"B, A\" match\n  mutate(\n    combo = map_chr(str_split(why_drink, \",\\\\s*\"), ~ paste(sort(.x), collapse = \" + \"))\n  ) |&gt;\n  count(combo, sort = TRUE) |&gt;\n  slice_head(n = 10) |&gt;\n  ggplot(aes(x = n, y = reorder(combo, n))) +\n  geom_col(fill = \"#6F4E37\", width = 0.7) +\n  geom_text(aes(label = n), hjust = -0.2, size = 3.5) +\n  scale_x_continuous(expand = expansion(mult = c(0, 0.12))) +\n  labs(\n    title = \"Top 10 Combinations of Reasons People Drink Coffee\",\n    x = \"Number of Respondents\",\n    y = NULL\n  ) +\n  theme_minimal()",
     "crumbs": [
       "EDA",
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Member 1 First Name & Last Name Initial</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Emma C. (Member 1)</span>"
     ]
   },
   {
@@ -47,7 +47,7 @@
     "href": "appx/proposal.html",
     "title": "Appendix A — Caffeine Intake as a Function of Coffee Preferences",
     "section": "",
-    "text": "Created by: Emma Cunningham and Anna Fratto\n##2-3 Broad Research Questions: - What are the trends and general preferences of coffee drinkers in the US? - What factors influence coffee intake? - What are the top influencers in consumer decisions to drink coffee at home vs. out? - What do people add when making their ideal order/coffee?\n##Project Inspiration - We wanted to focus on a health related topic - We are curious about caffeine intake within college students, but data might be restricted\n##Potential Data Source: - The Great American Coffee Taste Test - Tidy Tuesday (2024) - https://github.com/rfordatascience/tidytuesday/blob/main/data/2024/2024-05-14/readme.md\n##Communication Plans: - Our communication plan is to use iMessage. We also plan to use Google Docs (when mostly doing writing and not coding) to divide the work, then add it to our qmd. We feel this way of communicating and working is most effective at dividing the work and seeing what is finished/not finished. - We will try and meet/work in class when we can and then on Sundays/a weekday.\n##Roles: - We feel like we do not really need someone to be the main point of contact since there are two of us, but we intend to both communicate effectively when we have questions or concerns. It also helps that we plan on using iMessage because iMessage is easy to communicate through and access/see. - Together, we will work on overseeing the codebase and website and making sure the code follows the “Code Styling Guide.” Before we submit, we should check the “Code Styling Guide” and ensure it fits within the expectations.\n##Rough Implementation Plan - Finish everything before the deadlines so we can double-check - Plan ahead and have meet-up times outside of class - We will split up work evenly and skim the other person’s work to ensure we both understand what’s happening.",
+    "text": "Created by: Emma Cunningham and Anna Fratto",
     "crumbs": [
       "Appendices",
       "<span class='chapter-number'>A</span>  <span class='chapter-title'>Caffeine Intake as a Function of Coffee Preferences</span>"
@@ -59,6 +59,72 @@
     "title": "Appendix A — Caffeine Intake as a Function of Coffee Preferences",
     "section": "",
     "text": "Project Goal: Our project intends to investigate how varying coffee preferences affect caffeine usage. We plan to test different variables such as time of day (when making the coffee), cream use, coffee type, etc., and see how that impacts the amount of caffeine someone consumes.",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Caffeine Intake as a Function of Coffee Preferences</span>"
+    ]
+  },
+  {
+    "objectID": "appx/proposal.html#broad-research-questions",
+    "href": "appx/proposal.html#broad-research-questions",
+    "title": "Appendix A — Caffeine Intake as a Function of Coffee Preferences",
+    "section": "Broad Research Questions:",
+    "text": "Broad Research Questions:\n\nWhat are the trends and general preferences of coffee drinkers in the US?\nWhat factors influence coffee intake?\nWhat are the top influencers in consumer decisions to drink coffee at home vs. out?\nWhat do people add when making their ideal order/coffee?",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Caffeine Intake as a Function of Coffee Preferences</span>"
+    ]
+  },
+  {
+    "objectID": "appx/proposal.html#project-inspiration",
+    "href": "appx/proposal.html#project-inspiration",
+    "title": "Appendix A — Caffeine Intake as a Function of Coffee Preferences",
+    "section": "Project Inspiration",
+    "text": "Project Inspiration\n\nWe wanted to focus on a health related topic\nWe are curious about caffeine intake within college students, but data might be restricted",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Caffeine Intake as a Function of Coffee Preferences</span>"
+    ]
+  },
+  {
+    "objectID": "appx/proposal.html#potential-data-source",
+    "href": "appx/proposal.html#potential-data-source",
+    "title": "Appendix A — Caffeine Intake as a Function of Coffee Preferences",
+    "section": "Potential Data Source:",
+    "text": "Potential Data Source:\n\nThe Great American Coffee Taste Test - Tidy Tuesday (2024)\nhttps://github.com/rfordatascience/tidytuesday/blob/main/data/2024/2024-05-14/readme.md",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Caffeine Intake as a Function of Coffee Preferences</span>"
+    ]
+  },
+  {
+    "objectID": "appx/proposal.html#communication-plans",
+    "href": "appx/proposal.html#communication-plans",
+    "title": "Appendix A — Caffeine Intake as a Function of Coffee Preferences",
+    "section": "Communication Plans:",
+    "text": "Communication Plans:\n\nOur communication plan is to use iMessage. We also plan to use Google Docs (when mostly doing writing and not coding) to divide the work, then add it to our qmd. We feel this way of communicating and working is most effective at dividing the work and seeing what is finished/not finished.\nWe will try and meet/work in class when we can and then on Sundays/a weekday.",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Caffeine Intake as a Function of Coffee Preferences</span>"
+    ]
+  },
+  {
+    "objectID": "appx/proposal.html#roles",
+    "href": "appx/proposal.html#roles",
+    "title": "Appendix A — Caffeine Intake as a Function of Coffee Preferences",
+    "section": "Roles:",
+    "text": "Roles:\n\nWe feel like we do not really need someone to be the main point of contact since there are two of us, but we intend to both communicate effectively when we have questions or concerns. It also helps that we plan on using iMessage because iMessage is easy to communicate through and access/see.\nTogether, we will work on overseeing the codebase and website and making sure the code follows the “Code Styling Guide.” Before we submit, we should check the “Code Styling Guide” and ensure it fits within the expectations.",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Caffeine Intake as a Function of Coffee Preferences</span>"
+    ]
+  },
+  {
+    "objectID": "appx/proposal.html#rough-implementation-plan",
+    "href": "appx/proposal.html#rough-implementation-plan",
+    "title": "Appendix A — Caffeine Intake as a Function of Coffee Preferences",
+    "section": "Rough Implementation Plan",
+    "text": "Rough Implementation Plan\n\nFinish everything before the deadlines so we can double-check\nPlan ahead and have meet-up times outside of class\nWe will split up work evenly and skim the other person’s work to ensure we both understand what’s happening.",
     "crumbs": [
       "Appendices",
       "<span class='chapter-number'>A</span>  <span class='chapter-title'>Caffeine Intake as a Function of Coffee Preferences</span>"
