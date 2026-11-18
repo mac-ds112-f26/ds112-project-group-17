@@ -1,16 +1,92 @@
 ---
-title: "Member 2: Anna F."
+title: "Member 2 - Anna F."
 ---
 
 Your exploratory data analysis of the team datasets go here.
 
 
-##Instructions
-As individuals, not as a team, each member should perform an exploratory data analysis (EDA) on one of the project dataset and add the results into their respective Quarto file under the eda folder of the project repository.
+Dataset: https://github.com/rfordatascience/tidytuesday/blob/main/data/2024/2024-05-14/readme.md
 
 ```{r}
 library(tidyverse)
+library(janitor)
+library(here)
+library(fs)
+coffee_survey <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2024/2024-05-14/coffee_survey.csv')
 
-
+head(coffee_survey)
 ```
+```{r}
+#making a smaller subset from the coffee data
+coffee_small <- coffee_survey |>
+  select(submission_id, age, favorite, additions, where_drink, wfh)
+
+head(coffee_small)
+dim(coffee_small)
+
+# Check the answer choices
+coffee_small |> count(favorite, sort = TRUE)
+coffee_small |> count(additions, sort = TRUE)
+coffee_small |> count(where_drink, sort = TRUE)
+```
+
+## What types of coffee do people drink (ex: black, latte)?
+```{r}
+coffee_small |>
+  filter(!is.na(favorite)) |>
+  count(favorite) |>
+  ggplot(aes(x = n, y = fct_reorder(favorite, n), fill = n)) +
+  geom_col() +
+  scale_fill_viridis_c(guide = "none") +
+  theme_classic() +
+  labs(x = "Number of respondents", y = "Favorite coffee drink",
+       title = "Most Popular Coffee Drinks")
+```
+
+
+## What trends of coffee additives are there? (ex: sweet, cream, cold foam etc)
+```{r}
+additions_summary <- coffee_small |>
+  filter(!is.na(additions)) |>
+  summarize(
+    `Nothing (black)`  = mean(str_detect(additions, "black")),
+    `Milk or creamer`  = mean(str_detect(additions, "Milk")),
+    `Sugar/sweetener`  = mean(str_detect(additions, "Sugar")),
+    `Flavor syrup`     = mean(str_detect(additions, "syrup")),
+    `Other`            = mean(str_detect(additions, "Other"))
+  ) |>
+  pivot_longer(everything(), names_to = "addition", values_to = "prop")
+
+additions_summary |>
+  ggplot(aes(x = prop, y = fct_reorder(addition, prop), fill = addition)) +
+  geom_col() +
+  scale_x_continuous(labels = scales::percent) +
+  scale_fill_viridis_d(guide = "none") +
+  theme_classic() +
+  labs(x = "Percent of respondents", y = "Addition",
+       title = "What People Add to Their Coffee")
+```
+
+
+## building off of Emma's question of where they drink their coffee
+## Where are they drinking their coffee and how does it related to where they work? (ex: home, office)
+```{r}
+coffee_small |>
+  filter(!is.na(where_drink), !is.na(wfh)) |>
+  separate_longer_delim(where_drink, delim = ", ") |>
+  group_by(wfh) |>
+  mutate(n_people = n_distinct(submission_id)) |>
+  group_by(wfh, where_drink) |>
+  summarize(prop = n() / first(n_people), .groups = "drop") |>
+  ggplot(aes(x = prop, y = fct_reorder(where_drink, prop), fill = wfh)) +
+  geom_col(position = "dodge") +
+  scale_x_continuous(labels = scales::percent) +
+  scale_fill_viridis_d(end = 0.8) +
+  theme_classic() +
+  labs(x = "Percent of respondents", y = "Where they drink coffee",
+       fill = "Work arrangement",
+       title = "Where People Drink Coffee")
+```
+
+
 
